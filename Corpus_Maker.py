@@ -1,6 +1,9 @@
 from os import path, listdir
 import sys
 
+PUNCTUATIONS = ['.','\'', ',',';',':','"', '`', '#', '(', ')', '{', '}',
+                '[', ']','?','/','-','!']
+
 class Corpus_Maker:
     def __init__(self, folder_path):
         self.folder_path = folder_path
@@ -15,7 +18,7 @@ class Corpus_Maker:
             print(f'\nfile path detected instead of folder path. exiting...\n')
             exit()
 
-    def make(self):
+    def make(self, ignore_punctions=False):
         ofile = open(self.folder_path + 'corpus.txt', "w")
         folders = listdir(self.folder_path)
         for folder in folders:
@@ -27,16 +30,10 @@ class Corpus_Maker:
                 exit()
             corpus = open(filename)
             for line in corpus.readlines():
-                ofile.write(f'<s> {line.strip()} </s> ')
+                line = line.strip()
+                if (not ignore_punctions):
+                    for punc in PUNCTUATIONS:
+                        line = line.replace(punc, f' {punc} ')
+                ofile.write(f'<s> {line} </s> ')
         ofile.close()
         print('all done!')
-
-argv = sys.argv
-if (len(argv) > 1):
-    _path = argv[1]
-else:
-    print('\nno path was given. exiting...\n')
-    exit()
-
-x = Corpus_Maker(_path)
-x.make()
