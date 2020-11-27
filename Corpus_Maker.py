@@ -1,4 +1,5 @@
 from os import path, listdir
+from os.path import isfile
 import sys
 
 PUNCTUATIONS = ['.','\'', ',',';',':','"', '`', '#', '(', ')', '{', '}',
@@ -19,10 +20,12 @@ class Corpus_Maker:
             exit()
 
     def make(self, ignore_punctions=False):
+        v_set = set()
+        l = 0
         ofile = open(self.folder_path + 'corpus.txt', "w")
         folders = listdir(self.folder_path)
         for folder in folders:
-            if ('.' in folder):
+            if (isfile(self.folder_path + folder)):
                 continue
             filename = self.folder_path + folder + '/' + folder + '.txt'
             if (not path.exists(filename)):
@@ -34,6 +37,9 @@ class Corpus_Maker:
                 if (not ignore_punctions):
                     for punc in PUNCTUATIONS:
                         line = line.replace(punc, f' {punc} ')
+                splitted_line = line.split()
+                l += len(splitted_line)
+                v_set.update(splitted_line)
                 ofile.write(f'<s> {line} </s> ')
         ofile.close()
-        print('all done!')
+        print(f'corpus has v: {len(v_set)} and l: {l}')

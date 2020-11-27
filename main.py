@@ -9,7 +9,6 @@ if (len(argv) > 1):
     x.make(ignore_punctions=False)
 else:
     FOLDERPATH = './Full_set/'
-
     for folder in os.listdir(FOLDERPATH):
         addr = FOLDERPATH + folder
         print(addr)
