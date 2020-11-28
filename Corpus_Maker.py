@@ -19,7 +19,7 @@ class Corpus_Maker:
             print(f'\nfile path detected instead of folder path. exiting...\n')
             exit()
 
-    def make(self, ignore_punctions=False):
+    def make(self, ignore_punctions=False, join=False):
         v_set = set()
         l = 0
         ofile = open(self.folder_path + 'corpus.txt', "w")
@@ -33,13 +33,20 @@ class Corpus_Maker:
                 exit()
             corpus = open(filename)
             for line in corpus.readlines():
-                line = line.strip()
-                if (not ignore_punctions):
-                    for punc in PUNCTUATIONS:
-                        line = line.replace(punc, f' {punc} ')
-                splitted_line = line.split()
-                l += len(splitted_line)
-                v_set.update(splitted_line)
-                ofile.write(f'<s> {line} </s> ')
+                if (join):
+                    line = line.strip()
+                    splitted_line = line.split()
+                    l += len(splitted_line)
+                    v_set.update(splitted_line)
+                    ofile.write(f' {" ".join(splitted_line)} ')
+                else:
+                    line = line.strip()
+                    if (not ignore_punctions):
+                        for punc in PUNCTUATIONS:
+                            line = line.replace(punc, f' {punc} ')
+                    splitted_line = line.split()
+                    l += len(splitted_line)
+                    v_set.update(splitted_line)
+                    ofile.write(f'<s> {" ".join(splitted_line)} </s> ')
         ofile.close()
         print(f'corpus has v: {len(v_set)} and l: {l}')
