@@ -5,6 +5,8 @@ import sys
 PUNCTUATIONS = ['.','\'', ',',';',':','"', '`', '#', '(', ')', '{', '}',
                 '[', ']','?','/','-','!']
 
+OFILE_PATH = './Full_set/Combined/corpus-'
+
 class Corpus_Maker:
     def __init__(self, folder_path):
         self.folder_path = folder_path
@@ -19,10 +21,13 @@ class Corpus_Maker:
             print(f'\nfile path detected instead of folder path. exiting...\n')
             exit()
 
-    def make(self, ignore_punctions=False, join=False):
+    def make(self, ignore_punctions=False, join=False, i=1):
         v_set = set()
         l = 0
-        ofile = open(self.folder_path + 'corpus.txt', "w")
+        if (join):
+            ofile = open(self.folder_path + 'corpus.txt', "w")
+        else:
+            ofile = open(OFILE_PATH + f'{i}/corpus-{i}.txt', "w")
         folders = listdir(self.folder_path)
         for folder in folders:
             if (isfile(self.folder_path + folder)):

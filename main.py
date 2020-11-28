@@ -14,11 +14,15 @@ if (len(argv) > 1):
     x.make(ignore_punctions=False, join=join)
 else:
     FOLDERPATH = './Full_set/'
+    c = 1
     for folder in os.listdir(FOLDERPATH):
+        if (folder == 'Combined'):
+            continue
         addr = FOLDERPATH + folder
         print(addr)
         x = Corpus_Maker(addr)
-        x.make()
+        x.make(i=c)
+        c += 1
 
 
 
