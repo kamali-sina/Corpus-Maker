@@ -4,16 +4,12 @@ import sys
 
 argv = sys.argv
 if (len(argv) > 1):
-    join = False
-    if (argv[1] == '--main'):
-        join = True
-        _path = argv[2]
-    else:
-        _path = argv[1]
+    _path = argv[1]
     x = Corpus_Maker(_path)
-    x.make(ignore_punctions=False, join=join)
+    x.make(ignore_punctions=False)
 else:
     FOLDERPATH = './Full_set/'
+    print(f'no path was specified, using path {FOLDERPATH}')
     c = 1
     for folder in os.listdir(FOLDERPATH):
         if (folder == 'Combined'):

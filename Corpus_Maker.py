@@ -1,5 +1,5 @@
 from os import path, listdir
-from os.path import isfile
+from os.path import isfile, isdir
 import sys
 
 PUNCTUATIONS = ['.','\'', ',',';',':','"', '`', '#', '(', ')', '{', '}',
@@ -12,31 +12,46 @@ class Corpus_Maker:
         self.folder_path = folder_path
         if (not self.folder_path.endswith('/')):
             self.folder_path = self.folder_path + '/'
-        if (not path.exists(self.folder_path)):
-            print(f"\nfolder Path {folder_path} did not exist. exiting...\n")
+        if (not self.folder_check(folder_path)):
+            print(f"\nfolder Path {folder_path} was invalid. exiting...\n")
             exit()
+
+    def folder_check(self, path):
         try:
-            listdir(self.folder_path)
+            if (isdir(path)):
+                return True
+            return False
         except:
-            print(f'\nfile path detected instead of folder path. exiting...\n')
-            exit()
+            return False
+
+    def get_files(self, path):
+        if (not path.endswith('/')):
+            path = path + '/'
+        if (not self.folder_check(path)):
+            print('path was invalid')
+            return []
+        folders = [path]
+        files = []
+        while (len(folders) != 0):
+            folder = folders.pop(0)
+            temp = listdir(folder)
+            for f in temp:
+                fpath = folder + f 
+                if (isfile(fpath)):
+                    files.append(fpath)
+                else:
+                    folders.append(fpath + '/')
+        return files
 
     def make(self, ignore_punctions=False, join=False, i=1):
         v_set = set()
         l = 0
-        if (join):
-            ofile = open(self.folder_path + 'corpus.txt', "w")
-        else:
-            ofile = open(OFILE_PATH + f'{i}/corpus-{i}.txt', "w")
-        folders = listdir(self.folder_path)
-        for folder in folders:
-            if (isfile(self.folder_path + folder)):
+        ofile = open(self.folder_path + 'corpus.txt', "w")
+        files = self.get_files(self.folder_path)
+        for afile in files:
+            if (not afile.endswith('.txt')):
                 continue
-            filename = self.folder_path + folder + '/' + folder + '.txt'
-            if (not path.exists(filename)):
-                print(f"\nPath {filename} did not exist. exiting...\n")
-                exit()
-            corpus = open(filename)
+            corpus = open(afile)
             for line in corpus.readlines():
                 if (join):
                     line = line.strip()
