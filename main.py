@@ -19,6 +19,3 @@ else:
         x = Corpus_Maker(addr)
         x.make(i=c)
         c += 1
-
-
-

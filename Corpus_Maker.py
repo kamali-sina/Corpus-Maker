@@ -3,9 +3,11 @@ from os.path import isfile, isdir
 import sys
 
 PUNCTUATIONS = ['.','\'', ',',';',':','"', '`', '#', '(', ')', '{', '}',
-                '[', ']','?','/','-','!']
+                '[', ']','?','/','-','!', '$', '*', '&', '%']
 
 OFILE_PATH = './Full_set/Combined/corpus-'
+
+DIGIT_TAG = '<d>'
 
 class Corpus_Maker:
     def __init__(self, folder_path):
@@ -65,6 +67,9 @@ class Corpus_Maker:
                         for punc in PUNCTUATIONS:
                             line = line.replace(punc, f' {punc} ')
                     splitted_line = line.split()
+                    for index in range(len(splitted_line)):
+                        if (splitted_line[index].isnumeric()):
+                            splitted_line[index] = DIGIT_TAG
                     l += len(splitted_line)
                     v_set.update(splitted_line)
                     ofile.write(f'<s> {" ".join(splitted_line)} </s> ')
